@@ -166,7 +166,3 @@ This is a minimal demo project. Several best practices are intentionally simplif
 - Simple database connection (no connection pooling)
 - No environment-specific configurations
 - Basic styling
-
-## License
-
-MIT
