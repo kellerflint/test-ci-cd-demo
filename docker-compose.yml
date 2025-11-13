@@ -35,7 +35,9 @@ services:
     ports:
       - "3000:3000"
     environment:
-      REACT_APP_API_URL: http://backend:3001
+      # Default to localhost for local development
+      # Override with REACT_APP_API_URL environment variable or docker-compose.prod.yml
+      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:3001}
     depends_on:
       - backend
 
