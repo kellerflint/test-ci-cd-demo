@@ -109,8 +109,14 @@ jobs:
             docker compose up -d --build
             
             # Wait for services to be healthy
-            echo "Waiting for services to be ready..."
-            sleep 10
+            echo "Waiting for database to be ready..."
+            timeout 60 bash -c 'until docker compose exec -T db mysqladmin ping -h localhost -pRootpassword --silent; do echo "Waiting for database..."; sleep 2; done'
+            
+            echo "Waiting for backend to be ready..."
+            timeout 60 bash -c 'until curl -sf http://localhost:3001/health > /dev/null; do echo "Waiting for backend..."; sleep 2; done'
+            
+            echo "Waiting for frontend to be ready..."
+            timeout 60 bash -c 'until curl -sf http://localhost:3000 > /dev/null; do echo "Waiting for frontend..."; sleep 2; done'
             
             # Verify deployment
             echo "Verifying deployment..."

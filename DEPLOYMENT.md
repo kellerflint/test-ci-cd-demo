@@ -66,9 +66,6 @@ docker compose up -d
 docker compose ps
 docker compose down
 
-# Optional: Allow firewall ports
-ufw allow 3000
-ufw allow 3001
 ```
 
 ### 4. Test Deployment
@@ -106,20 +103,15 @@ curl http://localhost:3000
 
 ## What Happens on Push to Main
 
-```
-Push to main
-    ↓
-Run Tests (Backend, Frontend, E2E)
-    ↓ (if all pass)
-Build Docker Images
-    ↓
-Deploy to VM
-    ├─ SSH into VM
-    ├─ Pull latest code
-    ├─ Stop old containers
-    ├─ Build new containers
-    └─ Start services
-```
+- Push to main
+- Run Tests (Backend, Frontend, E2E)
+- Build Docker Images (if tests pass)
+- Deploy to VM
+   - SSH into VM
+   - Pull latest code
+   - Stop old containers
+   - Build new containers
+   - Start services
 
 ## Accessing Your Deployed App
 
@@ -151,43 +143,7 @@ docker compose down
 docker compose up -d --build
 ```
 
-## Environment Configuration
-
-The project uses different API URLs for different environments:
-
-- **Local development**: `http://localhost:3001` (default when no `.env` file)
-- **Production**: Set via `.env` file (copied from `.env.production`)
-- **E2E tests**: `http://backend:3001` (Docker network hostname)
-
-Docker Compose automatically reads `.env` files, so just run `docker compose up` - no extra flags needed!
-
 ## Troubleshooting
-
-### Deployment fails?
-- Check GitHub Actions logs: Repository → Actions → Click failed workflow
-- Verify GitHub secrets are set correctly
-- Ensure VM has Docker installed: `docker --version`
-- Check VM disk space: `df -h`
-
-### Can't access the site?
-- Check firewall: `ufw status`
-- Allow ports: `ufw allow 3000 && ufw allow 3001`
-- Check containers: `docker compose ps`
-- View logs: `docker compose logs`
-
-### Check logs on VM:
-```bash
-cd /home/projects/test-ci-cd-demo
-docker compose logs backend
-docker compose logs frontend
-docker compose logs db
-```
-
-### Restart services:
-```bash
-docker compose down
-docker compose up -d --build
-```
 
 ### Common Issues
 
