@@ -24,16 +24,13 @@ Click **"New repository secret"** and add these 3 secrets:
 
 ### 2. Configure Production Environment
 
-Before deploying, update the API URL in `docker-compose.prod.yml` with your server's IP:
+The repository includes a `.env.production` template. Update it with your server's IP:
 
-```yaml
-services:
-  frontend:
-    environment:
-      REACT_APP_API_URL: http://YOUR_SERVER_IP:3001
+```bash
+REACT_APP_API_URL=http://YOUR_SERVER_IP:3001
 ```
 
-Replace `YOUR_SERVER_IP` with your actual VM IP address.
+This file gets copied to `.env` automatically during deployment.
 
 > **Why?** The React app runs in the browser, which needs to access the backend API using your server's public IP, not Docker network hostnames.
 
@@ -146,20 +143,23 @@ cd /home/projects/test-ci-cd-demo
 # Pull latest changes
 git pull origin main
 
-# Restart services with production config
+# Set up environment (if not already done)
+cp .env.production .env
+
+# Restart services
 docker compose down
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+docker compose up -d --build
 ```
 
 ## Environment Configuration
 
 The project uses different API URLs for different environments:
 
-- **Local development**: `http://localhost:3001` (defined in `docker-compose.yml`)
-- **Production**: `http://your-server-ip:3001` (defined in `docker-compose.prod.yml`)
+- **Local development**: `http://localhost:3001` (default when no `.env` file)
+- **Production**: Set via `.env` file (copied from `.env.production`)
 - **E2E tests**: `http://backend:3001` (Docker network hostname)
 
-The production override (`docker-compose.prod.yml`) is applied automatically during deployment.
+Docker Compose automatically reads `.env` files, so just run `docker compose up` - no extra flags needed!
 
 ## Troubleshooting
 

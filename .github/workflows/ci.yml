@@ -96,13 +96,17 @@ jobs:
               git clone https://github.com/${{ github.repository }}.git .
             fi
             
+            # Set up production environment
+            echo "Setting up production environment..."
+            cp .env.production .env
+            
             # Stop existing containers
             echo "Stopping existing containers..."
             docker compose down
             
-            # Pull latest images and rebuild with production config
+            # Build and start containers (reads .env automatically)
             echo "Building and starting containers..."
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+            docker compose up -d --build
             
             # Wait for services to be healthy
             echo "Waiting for services to be ready..."

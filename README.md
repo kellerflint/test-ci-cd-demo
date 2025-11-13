@@ -69,7 +69,7 @@ docker compose up --build
    - Backend API: http://localhost:3001
    - MySQL: localhost:3306
 
-> **Note**: Local development uses `localhost` for API calls. Production uses `docker-compose.prod.yml` to override with your server's public IP.
+> **Note**: Production uses a `.env` file to set the API URL. Locally, it defaults to `localhost`.
 
 ### Running Tests
 
