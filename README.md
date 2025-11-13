@@ -51,7 +51,7 @@ A minimal full-stack application demonstrating Docker containerization, comprehe
 - Docker
 - Docker Compose
 
-### Running the Application
+### Running the Application Locally
 
 1. Clone the repository:
 ```bash
@@ -137,8 +137,39 @@ The GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every push and 
 2. **Frontend Tests**: React component tests in Docker container
 3. **E2E Tests**: Full application tests with Cypress in Docker
 4. **Build**: Docker image build verification
+5. **Deploy**: Automatic deployment to production VM (main branch only)
 
 **All tests run in Docker containers** - the exact same environment locally and in CI, matching production.
+
+### Deployment
+
+The application automatically deploys to a Digital Ocean VM when:
+- Changes are pushed to the `main` branch
+- All tests pass successfully
+
+**See [DEPLOYMENT.md](DEPLOYMENT.md) for complete setup instructions.**
+
+**Manual deployment** (if needed):
+```bash
+# SSH into your VM
+ssh root@your-vm-ip
+
+# Navigate to project directory
+cd /home/projects/test-ci-cd-demo
+
+# Pull latest changes
+git pull origin main
+
+# Restart services
+docker compose down
+docker compose up -d --build
+```
+
+## Production Access
+
+Once deployed, access your application at:
+- **Frontend**: http://your-vm-ip:3000
+- **Backend API**: http://your-vm-ip:3001/health
 
 ## API Endpoints
 
