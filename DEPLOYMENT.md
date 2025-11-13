@@ -22,7 +22,22 @@ Click **"New repository secret"** and add these 3 secrets:
 
 **Security Note**: For a real production environment, use SSH keys instead of passwords.
 
-### 2. Prepare Your VM
+### 2. Configure Production Environment
+
+Before deploying, update the API URL in `docker-compose.prod.yml` with your server's IP:
+
+```yaml
+services:
+  frontend:
+    environment:
+      REACT_APP_API_URL: http://YOUR_SERVER_IP:3001
+```
+
+Replace `YOUR_SERVER_IP` with your actual VM IP address.
+
+> **Why?** The React app runs in the browser, which needs to access the backend API using your server's public IP, not Docker network hostnames.
+
+### 3. Prepare Your VM
 
 SSH into your Digital Ocean VM and run these commands:
 
@@ -59,7 +74,7 @@ ufw allow 3000
 ufw allow 3001
 ```
 
-### 3. Test Deployment
+### 4. Test Deployment
 
 ```bash
 # On your local machine
@@ -70,7 +85,7 @@ git push origin main
 
 Watch it deploy at: `https://github.com/kellerflint/test-ci-cd-demo/actions`
 
-### 4. Verify Deployment
+### 5. Verify Deployment
 
 Visit your app: `http://your-vm-ip:3000`
 
@@ -131,10 +146,20 @@ cd /home/projects/test-ci-cd-demo
 # Pull latest changes
 git pull origin main
 
-# Restart services
+# Restart services with production config
 docker compose down
-docker compose up -d --build
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 ```
+
+## Environment Configuration
+
+The project uses different API URLs for different environments:
+
+- **Local development**: `http://localhost:3001` (defined in `docker-compose.yml`)
+- **Production**: `http://your-server-ip:3001` (defined in `docker-compose.prod.yml`)
+- **E2E tests**: `http://backend:3001` (Docker network hostname)
+
+The production override (`docker-compose.prod.yml`) is applied automatically during deployment.
 
 ## Troubleshooting
 

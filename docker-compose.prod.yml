@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  frontend:
+    environment:
+      # Override with your server's public IP or domain
+      # When users visit your-ip:3000, the browser will make requests to your-ip:3001
+      REACT_APP_API_URL: http://147.182.200.65:3001

@@ -61,13 +61,15 @@ cd test-ci-cd-demo
 
 2. Start all services with Docker Compose:
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 3. Access the application:
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:3001
    - MySQL: localhost:3306
+
+> **Note**: Local development uses `localhost` for API calls. Production uses `docker-compose.prod.yml` to override with your server's public IP.
 
 ### Running Tests
 
@@ -147,7 +149,7 @@ The application automatically deploys to a Digital Ocean VM when:
 - Changes are pushed to the `main` branch
 - All tests pass successfully
 
-**See [DEPLOYMENT.md](DEPLOYMENT.md) for complete setup instructions.**
+**📖 See [DEPLOYMENT.md](DEPLOYMENT.md) for complete setup instructions.**
 
 **Manual deployment** (if needed):
 ```bash
